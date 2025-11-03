@@ -1,0 +1,67 @@
+name: Release AnimationOverhaul 1.7.10
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    name: Build & Release Forge 1.7.10 Mod
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup Java 8 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "8"
+          cache: gradle
+
+      - name: Ensure gradlew is executable
+        run: chmod +x gradlew
+
+      - name: Build mod
+        run: |
+          ./gradlew setupDecompWorkspace --refresh-dependencies --no-daemon
+          ./gradlew build --no-daemon
+
+      - name: Locate JAR
+        id: find_jar
+        run: |
+          JAR_PATH=$(find build/libs -name "*.jar" | head -n 1)
+          echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Animation Overhaul 1.7.10 — ${{ github.ref_name }}"
+          body: |
+            ✨ **Automatic Release Build**
+            - Version: ${{ github.ref_name }}
+            - Minecraft: 1.7.10
+            - Forge: 10.13.4.1614
+            - Built via GitHub Actions
+
+            🧱 Download the mod below:
+          files: |
+            ${{ steps.find_jar.outputs.jar_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

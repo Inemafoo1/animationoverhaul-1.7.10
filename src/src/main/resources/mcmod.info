@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "animationoverhaul17",
+    "name": "Animation Overhaul 1.7.10 Edition",
+    "description": "Recria anima\u00e7\u00f5es fluidas de jogador no estilo Animation Overhaul moderno, para Minecraft 1.7.10.",
+    "version": "1.0.0",
+    "authorList": [
+      "Patryck Marinho Nogueira",
+      "ChatGPT"
+    ],
+    "url": "",
+    "credits": "Adaptado a partir de Animation Overhaul (1.20.x)",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
