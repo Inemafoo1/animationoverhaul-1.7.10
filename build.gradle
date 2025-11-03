@@ -1,4 +1,4 @@
-﻿buildscript {
+buildscript {
     repositories {
         mavenCentral()
         maven { url "https://files.minecraftforge.net/maven" }
